@@ -34,9 +34,9 @@ public class MyRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.View
         if (position == 0) {//header 头标题
             return TYPE_TOPIC;
         } else {
-            if (position % 2==0){//出去header后的双数行
+            if (position % 2 == 0) {//出去header后的双数行
                 return TYPE_DOUBLE;
-            }else {
+            } else {
                 return TYPE_SINGLE;
             }
         }
@@ -44,35 +44,42 @@ public class MyRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType ==TYPE_SINGLE){
+        if (viewType == TYPE_SINGLE) {
             return new MyViewHolder(mLayoutInflater.inflate(R.layout.simple_recycleview_item, parent, false));
-        }else if (viewType==TYPE_DOUBLE){
+        } else if (viewType == TYPE_DOUBLE) {
             return new MyViewHolder(mLayoutInflater.inflate(R.layout.double_recycleview_item, parent, false));
-        }else {
+        } else {
             View inflate = mLayoutInflater.inflate(R.layout.header_title, parent, false);
             HeaderViewHolder headerViewHolder = new HeaderViewHolder(inflate);
             return headerViewHolder;
         }
     }
-
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-       if (position==0){
-           return;
-       }
-       if (holder instanceof MyViewHolder){
-           String s = mDatas.get(position - 1);
-         ((MyViewHolder) holder).img_recycle.setImageResource(R.mipmap.lack_coins_red);
-         ((MyViewHolder) holder).mTextView.setText(s);
-       }else if (holder instanceof HeaderViewHolder){
-           ((HeaderViewHolder) holder).mTextView.setText("测试列表开始处");
-       }
+    public void onBindViewHolder(final RecyclerView.ViewHolder holder, final int position) {
+        if (position == 0) {
+            return;
+        }
+        if (holder instanceof MyViewHolder) {
+            String s = mDatas.get(position - 1);
+            ((MyViewHolder) holder).img_recycle.setImageResource(R.mipmap.lack_coins_red);
+            ((MyViewHolder) holder).mTextView.setText(s);
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ToastUtils.showToast(mContext,"点击了"+position);
+                }
+            });
+
+        } else if (holder instanceof HeaderViewHolder) {
+            ((HeaderViewHolder) holder).mTextView.setText("测试列表开始处");
+        }
     }
 
     @Override
     public int getItemCount() {
         return mDatas == null ? 0 : mDatas.size();
     }
+
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
         TextView mTextView;
@@ -83,7 +90,9 @@ public class MyRecycleViewAdapter extends RecyclerView.Adapter<RecyclerView.View
             mTextView = itemView.findViewById(R.id.item_recyle);
             img_recycle = itemView.findViewById(R.id.img_recycle);
         }
+
     }
+
     public static class HeaderViewHolder extends RecyclerView.ViewHolder {
 
         TextView mTextView;
